@@ -460,6 +460,21 @@ public class ArtifactoryClientConfiguration {
         }
     }
 
+    public class UserTokenConfiguration extends PrefixPropertyHandler {
+        public UserTokenConfiguration(String prefix) {
+            super(root, prefix);
+        }
+
+        public String getUserToken() {
+            return getStringValue(USERTOKEN);
+        }
+
+        public void setUserToken(String userToken) {
+            setStringValue(USERTOKEN, userToken);
+        }
+
+    }
+
     public abstract class RepositoryConfiguration extends AuthenticationConfiguration {
 
         private ImmutableMap<String, String> calculatedMatrixParams;

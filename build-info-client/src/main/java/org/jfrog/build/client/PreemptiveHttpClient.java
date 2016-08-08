@@ -26,6 +26,7 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -49,6 +50,7 @@ public class PreemptiveHttpClient {
 
     private DefaultHttpClient httpClient;
     private BasicHttpContext localContext;
+    private String userToken;
 
     static {
         // initialize client version
@@ -73,6 +75,11 @@ public class PreemptiveHttpClient {
         httpClient = createHttpClient(userName, password, timeout);
     }
 
+    public PreemptiveHttpClient(String userToken, int timeout) {
+        this(null, null, timeout);
+        this.userToken = userToken;
+    }
+
     public void setProxyConfiguration(String host, int port, String username, String password) {
         HttpHost proxy = new HttpHost(host, port);
         httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
@@ -87,6 +94,9 @@ public class PreemptiveHttpClient {
     public HttpResponse execute(HttpUriRequest request) throws IOException {
         if (localContext != null) {
             return httpClient.execute(request, localContext);
+        } else if (userToken != null) {
+            request.addHeader(new BasicHeader("X-JFrog-Art-API", userToken));
+            return httpClient.execute(request);
         } else {
             return httpClient.execute(request);
         }

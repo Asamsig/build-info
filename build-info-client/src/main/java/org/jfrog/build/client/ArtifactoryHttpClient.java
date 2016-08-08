@@ -54,6 +54,7 @@ public class ArtifactoryHttpClient {
     private final String artifactoryUrl;
     private final String username;
     private final String password;
+    private String userToken;
     private int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT_SECS;
     private ProxyConfiguration proxyConfiguration;
 
@@ -64,6 +65,11 @@ public class ArtifactoryHttpClient {
         this.username = username;
         this.password = password;
         this.log = log;
+    }
+
+    public ArtifactoryHttpClient(String artifactoryUrl, String userToken, Log log) {
+        this(artifactoryUrl, null, null, log);
+        this.userToken = userToken;
     }
 
     public static String encodeUrl(String unescaped) {
@@ -118,7 +124,12 @@ public class ArtifactoryHttpClient {
 
     public PreemptiveHttpClient getHttpClient() {
         if (deployClient == null) {
-            PreemptiveHttpClient client = new PreemptiveHttpClient(username, password, connectionTimeout);
+            PreemptiveHttpClient client;
+            if (userToken != null) {
+                client = new PreemptiveHttpClient(userToken, connectionTimeout);
+            } else {
+                client = new PreemptiveHttpClient(username, password, connectionTimeout);
+            }
             if (proxyConfiguration != null) {
                 client.setProxyConfiguration(proxyConfiguration.host, proxyConfiguration.port,
                         proxyConfiguration.username, proxyConfiguration.password);
