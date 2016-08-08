@@ -97,6 +97,10 @@ public class ArtifactoryBuildInfoClient extends ArtifactoryBaseClient{
        super(artifactoryUrl, username, password, log);
     }
 
+    public ArtifactoryBuildInfoClient(String artifactoryUrl, String userToken, Log log) {
+       super(artifactoryUrl, userToken, log);
+    }
+
     /**
      * @return A list of local repositories available for deployment.
      * @throws IOException On any connection error

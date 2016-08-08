@@ -20,6 +20,12 @@ public abstract class ArtifactoryBaseClient {
         this.log = logger;
     }
 
+    public ArtifactoryBaseClient(String artifactoryUrl, String userToken, Log logger) {
+        this.artifactoryUrl = StringUtils.stripEnd(artifactoryUrl, "/");
+        httpClient = new ArtifactoryHttpClient(this.artifactoryUrl, userToken, logger);
+        this.log = logger;
+    }
+
     public void shutdown() {
         if (httpClient != null) {
             httpClient.shutdown();

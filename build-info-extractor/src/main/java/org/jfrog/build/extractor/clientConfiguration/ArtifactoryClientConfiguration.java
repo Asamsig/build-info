@@ -458,12 +458,6 @@ public class ArtifactoryClientConfiguration {
         public void setPassword(String password) {
             setStringValue(PASSWORD, password);
         }
-    }
-
-    public class UserTokenConfiguration extends PrefixPropertyHandler {
-        public UserTokenConfiguration(String prefix) {
-            super(root, prefix);
-        }
 
         public String getUserToken() {
             return getStringValue(USERTOKEN);
@@ -472,7 +466,6 @@ public class ArtifactoryClientConfiguration {
         public void setUserToken(String userToken) {
             setStringValue(USERTOKEN, userToken);
         }
-
     }
 
     public abstract class RepositoryConfiguration extends AuthenticationConfiguration {
